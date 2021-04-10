@@ -201,17 +201,18 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
         return msg_len; // pass error code on
     }
 
-    house_id = rh_payload[1];
-    module_id = rh_payload[2];
-    sensor_type = rh_payload[3];
-    sensor_count = rh_payload[4];
-    alarms = rh_payload[5];
-    sensor_value = rh_payload[6];
-    battery_voltage = rh_payload[7];
+    house_id = rh_payload[5];
+    module_id = rh_payload[6];
+    sensor_type = rh_payload[7];
+    sensor_count = rh_payload[8];
+    alarms = rh_payload[9];
+    sensor_value = rh_payload[10];
+    battery_voltage = rh_payload[11];
 
     /* clang-format off */
     data = data_make(
-            "model",            "",                 DATA_STRING,  _X("SensibleLiving-Moisture","Sensible Living Plant Moisture"),
+            "model",            "",                 DATA_STRING,  _X("Sensor_simple","Sensor_simple"),
+			"id",				"",					DATA_INT,     house_id,
             "house_id",         "House ID",         DATA_INT,     house_id,
             "module_id",        "Module ID",        DATA_INT,     module_id,
             "sensor_type",      "Sensor Type",      DATA_INT,     sensor_type,
@@ -241,6 +242,7 @@ static char *radiohead_ask_output_fields[] = {
 
 static char *sensible_living_output_fields[] = {
     "model",
+	"id",
     "house_id",
     "module_id",
     "sensor_type",
