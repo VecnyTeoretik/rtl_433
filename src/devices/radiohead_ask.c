@@ -202,12 +202,12 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     }
 
     house_id = rh_payload[1];
-    module_id = (rh_payload[2] << 8) | rh_payload[3];
-    sensor_type = rh_payload[4];
-    sensor_count = rh_payload[5];
-    alarms = rh_payload[6];
-    sensor_value = (rh_payload[7] << 8) | rh_payload[8];
-    battery_voltage = (rh_payload[9] << 8) | rh_payload[10];
+    module_id = rh_payload[2];
+    sensor_type = rh_payload[3];
+    sensor_count = rh_payload[4];
+    alarms = rh_payload[5];
+    sensor_value = rh_payload[6];
+    battery_voltage = rh_payload[7];
 
     /* clang-format off */
     data = data_make(
@@ -264,7 +264,7 @@ r_device radiohead_ask = {
 };
 
 r_device sensible_living = {
-    .name           = "Sensible Living Mini-Plant Moisture Sensor",
+    .name           = "TEST",
     .modulation     = OOK_PULSE_PCM_RZ,
     .short_width    = 1000,
     .long_width     = 1000,
