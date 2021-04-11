@@ -161,6 +161,26 @@ static int radiohead_ask_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     if (data_len <= 0)
       return DECODE_FAIL_SANITY;
 
+fprintf(stdout, "-----------------------\n");
+	fprintf(stdout, "msg_len 0 - %d \n",rh_payload[0]);
+	fprintf(stdout, "header_to 1 - %d \n",rh_payload[1]);
+	fprintf(stdout, "header_from 2 - %d \n",rh_payload[2]);
+	fprintf(stdout, "header_id 3 - %d \n",rh_payload[3]);
+	fprintf(stdout, "header_flags 4 - %d \n",rh_payload[4]);
+	fprintf(stdout, "payload: \n");
+	fprintf(stdout, "5 - %d \n",rh_payload[5]);
+	fprintf(stdout, "6 - %d \n",rh_payload[6]);
+	fprintf(stdout, "7 - %d \n",rh_payload[7]);
+	fprintf(stdout, "8 - %d \n",rh_payload[8]);
+	fprintf(stdout, "9 - %d \n",rh_payload[9]);
+	fprintf(stdout, "10 - %d \n",rh_payload[10]);
+	fprintf(stdout, "11 - %d \n",rh_payload[11]);
+	fprintf(stdout, "11 - %d \n",rh_payload[12]);
+	fprintf(stdout, "11 - %d \n",rh_payload[13]);
+	
+	fprintf(stdout, "-----------------------\n");
+
+
     header_to = rh_payload[1];
     header_from = rh_payload[2];
     header_id = rh_payload[3];
@@ -200,7 +220,26 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     if (msg_len <= 0) {
         return msg_len; // pass error code on
     }
-
+	
+	fprintf(stdout, "-----------------------\n");
+	fprintf(stdout, "msg_len 0 - %d \n",rh_payload[0]);
+	fprintf(stdout, "header_to 1 - %d \n",rh_payload[1]);
+	fprintf(stdout, "header_from 2 - %d \n",rh_payload[2]);
+	fprintf(stdout, "header_id 3 - %d \n",rh_payload[3]);
+	fprintf(stdout, "header_flags 4 - %d \n",rh_payload[4]);
+	fprintf(stdout, "payload: \n");
+	fprintf(stdout, "5 - %d \n",rh_payload[5]);
+	fprintf(stdout, "6 - %d \n",rh_payload[6]);
+	fprintf(stdout, "7 - %d \n",rh_payload[7]);
+	fprintf(stdout, "8 - %d \n",rh_payload[8]);
+	fprintf(stdout, "9 - %d \n",rh_payload[9]);
+	fprintf(stdout, "10 - %d \n",rh_payload[10]);
+	fprintf(stdout, "11 - %d \n",rh_payload[11]);
+	fprintf(stdout, "11 - %d \n",rh_payload[12]);
+	fprintf(stdout, "11 - %d \n",rh_payload[13]);
+	
+	fprintf(stdout, "-----------------------\n");
+  
     house_id = rh_payload[5];
     module_id = rh_payload[6];
     sensor_type = rh_payload[7];
@@ -208,6 +247,14 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     alarms = rh_payload[9];
     sensor_value = rh_payload[10];
     battery_voltage = rh_payload[11];
+  
+   /*  house_id = rh_payload[1];
+    module_id = (rh_payload[2] << 8) | rh_payload[3];
+    sensor_type = rh_payload[4];
+    sensor_count = rh_payload[5];
+    alarms = rh_payload[6];
+    sensor_value = (rh_payload[7] << 8) | rh_payload[8];
+    battery_voltage = (rh_payload[9] << 8) | rh_payload[10]; */
 
     /* clang-format off */
     data = data_make(
@@ -242,7 +289,6 @@ static char *radiohead_ask_output_fields[] = {
 
 static char *sensible_living_output_fields[] = {
     "model",
-	"id",
     "house_id",
     "module_id",
     "sensor_type",
@@ -266,7 +312,7 @@ r_device radiohead_ask = {
 };
 
 r_device sensible_living = {
-    .name           = "TEST",
+    .name           = "Sensible Living Mini-Plant Moisture Sensor",
     .modulation     = OOK_PULSE_PCM_RZ,
     .short_width    = 1000,
     .long_width     = 1000,
