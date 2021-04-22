@@ -221,11 +221,18 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
         return msg_len; // pass error code on
     }
 
+	int fields_len = 0;
+	for (char **iter = decoder->fields; iter && *iter; ++iter) {
+		fields_len++;
+    }
+
+
 	fprintf(stdout, "protocol_num %d \n", decoder->protocol_num);
 	fprintf(stdout, "range_db %.1f dB\n", decoder->range_db);
 	fprintf(stdout, "rssi_db %.1f dB\n", decoder->rssi_db);
 	fprintf(stdout, "snr_db %.1f dB\n", decoder->snr_db);
 	fprintf(stdout, "noise_db %.1f dB\n", decoder->noise_db);
+	fprintf(stdout, "fields %s dB\n", decoder->fields);
 	fprintf(stdout, "-----------------------\n");
 	fprintf(stdout, "msg_len 0 - %d \n",rh_payload[0]);
 	fprintf(stdout, "header_to 1 - %d \n",rh_payload[1]);
@@ -281,6 +288,7 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
             "snr_db",     "snr_db",     DATA_DOUBLE,     snr_db,
             "noise_db",     "noise_db",     DATA_DOUBLE,     noise_db,
             "mic",              "Integrity",        DATA_STRING,  "CRC",
+			 "fields", "", DATA_ARRAY, data_array(fields_len, DATA_STRING, decoder->fields),
             NULL);
     /* clang-format on */
 
@@ -311,6 +319,13 @@ static char *sensible_living_output_fields[] = {
     "battery_voltage", // TODO: remove this
     "battery_mV",
     "mic",
+	"mod",
+	"freq",
+	"freq1",
+	"freq2",
+	"rssi",
+	"snr",
+	"noise",	
     NULL,
 };
 
