@@ -26,8 +26,8 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
     int ret = 0;
     if (device->decode_fn) {
         ret = device->decode_fn(device, bits);
-        fprintf(stdout, "account_event    %s(): %s\n", demod_name, device->name);
-        bitbuffer_print(bits);
+        //fprintf(stdout, "account_event    %s(): %s\n", demod_name, device->name);
+        //bitbuffer_print(bits);
 
     }
 
@@ -66,11 +66,16 @@ int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
     int s_gap   = device->gap_limit * samples_per_us;
     int s_sync  = device->sync_width * samples_per_us;
     int s_tolerance = device->tolerance * samples_per_us;
+
     fprintf(stdout, " - * - DEBUG - * - Asi tady by to mělo být ?");
-    fprintf(stdout,"range_dB %.1f dB", pulses->range_db);
-    fprintf(stdout,"rssi_dB %.1f dB", pulses->rssi_db);
-    fprintf(stdout,"snr_dB %.1f dB", pulses->snr_db);
-    fprintf(stdout,"noise_dB %.1f dB" , pulses->noise_db);
+
+    fprintf(stdout, "pulse_demod_pcm  %s\n", device->name);
+    
+
+    fprintf(stdout,"range_dB %.1f dB\n", pulses->range_db);
+    fprintf(stdout,"rssi_dB %.1f dB\n", pulses->rssi_db);
+    fprintf(stdout,"snr_dB %.1f dB\n", pulses->snr_db);
+    fprintf(stdout,"noise_dB %.1f dB\n" , pulses->noise_db);
 
     // check for rounding to zero
     if ((device->short_width > 0 && s_short <= 0)
