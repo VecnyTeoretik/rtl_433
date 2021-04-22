@@ -59,6 +59,9 @@ typedef struct r_device {
     float rssi_db;
     float snr_db;
     float noise_db;
+    float freq1_hz;
+    float freq2_hz;
+    float centerfreq_hz;
 
 
     /* public for each decoder */

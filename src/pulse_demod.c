@@ -29,6 +29,11 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
 		device->rssi_db = pulses->rssi_db;
 		device->snr_db = pulses->snr_db;
 		device->noise_db = pulses->noise_db;
+        device->freq1_hz = pulses->freq1_hz;
+        device->freq2_hz = pulses->freq2_hz;
+        device->centerfreq_hz = pulses->centerfreq_hz;
+
+
         ret = device->decode_fn(device, bits);
       // fprintf(stdout,"range_dB %.1f dB\n", pulses->range_db);
      //   fprintf(stdout,"range_dB %.1f dB\n", device->range_db);

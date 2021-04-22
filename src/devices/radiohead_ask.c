@@ -268,6 +268,8 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     sensor_value = (rh_payload[7] << 8) | rh_payload[8];
     battery_voltage = (rh_payload[9] << 8) | rh_payload[10]; */
 
+
+
     /* clang-format off */
     data = data_make(
             "model",            "",                 DATA_STRING,  _X("Sensor_simple","Sensor_simple"),
@@ -279,10 +281,14 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
             "alarms",           "Alarms",           DATA_INT,     alarms,
             "sensor_value",     "Sensor Value",     DATA_INT,     sensor_value,
             _X("battery_mV",	"battery_voltage"),       "Battery Voltage",  DATA_INT,     _X(battery_voltage * 10, battery_voltage),
-				"range_db",     "range_db",     DATA_DOUBLE,     (double)decoder->range_db,
-				"rssi_db",     	"rssi_db",     	DATA_DOUBLE,     (double)decoder->rssi_db,
-				"snr_db",     	"snr_db",     	DATA_DOUBLE,     (double)decoder->snr_db,
-				"noise_db",     "noise_db",     DATA_DOUBLE,     (double)decoder->noise_db,
+			"freq",             "frekvence",         DATA_DOUBLE,     (double)decoder->range_db,
+            "freq1",           "frekvence 1",       DATA_DOUBLE,      (double)decoder->freq1_hz,
+            "freq2",           "frekvence 2",       DATA_DOUBLE,     (double)decoder->freq2_hz,
+            "centerfreq",       "frekvence cent",   DATA_DOUBLE,     (double)decoder->centerfreq_hz,
+            "range_db",         "range db",         DATA_DOUBLE,     (double)decoder->range_db,
+            "rssi_db",     	    "rssi db",     	    DATA_DOUBLE,     (double)decoder->rssi_db,
+			"snr_db",     	    "snr db",     	    DATA_DOUBLE,     (double)decoder->snr_db,
+			"noise_db",         "noise db",         DATA_DOUBLE,     (double)decoder->noise_db,
             "mic",           	"Integrity",        DATA_STRING,  "CRC",
 			 "fields", "", DATA_ARRAY, data_array(fields_len, DATA_STRING, decoder->fields),
             NULL);
