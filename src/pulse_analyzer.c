@@ -220,6 +220,15 @@ void pulse_analyzer(pulse_data_t *data, int package_type)
     histogram_t hist_periods = {0};
     histogram_t hist_timings = {0};
 
+
+    fprintf(stdout,"range_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->range_db);
+    fprintf(stdout,"rssi_dB",          "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->rssi_db);
+    fprintf(stdout,"snr_dB",           "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->snr_db);
+    fprintf(stdout,"noise_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->noise_db);
+
+
+    
+
     // Generate statistics
     histogram_sum(&hist_pulses, data->pulse, data->num_pulses, TOLERANCE);
     histogram_sum(&hist_gaps, data->gap, data->num_pulses - 1, TOLERANCE);                      // Leave out last gap (end)
@@ -423,6 +432,10 @@ void pulse_analyzer(pulse_data_t *data, int package_type)
                 device.reset_limit, device.sync_width);
         switch (device.modulation) {
         case FSK_PULSE_PCM:
+            fprintf(stdout,"range_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->range_db);
+            fprintf(stdout,"rssi_dB",          "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->rssi_db);
+            fprintf(stdout,"snr_dB",           "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->snr_db);
+            fprintf(stdout,"noise_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, data->noise_db);
             fprintf(stderr, "Use a flex decoder with -X 'n=name,m=FSK_PCM,s=%.0f,l=%.0f,r=%.0f'\n",
                     device.short_width, device.long_width, device.reset_limit);
             pulse_demod_pcm(data, &device);

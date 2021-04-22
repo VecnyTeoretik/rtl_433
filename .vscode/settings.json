@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "decoder.h": "c",
+        "r_device.h": "c",
+        "util.h": "c"
+    }
+}

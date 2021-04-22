@@ -26,6 +26,9 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
     int ret = 0;
     if (device->decode_fn) {
         ret = device->decode_fn(device, bits);
+        fprintf(stdout, "account_event    %s(): %s\n", demod_name, device->name);
+        bitbuffer_print(bits);
+
     }
 
     // statistics accounting
@@ -54,6 +57,8 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
 
 int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
 {
+
+    fprintf(stdout, "DEBUG pulse_demod_pcm\n");
     float samples_per_us = pulses->sample_rate / 1.0e6;
     int s_short = device->short_width * samples_per_us;
     int s_long  = device->long_width * samples_per_us;
@@ -61,6 +66,11 @@ int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
     int s_gap   = device->gap_limit * samples_per_us;
     int s_sync  = device->sync_width * samples_per_us;
     int s_tolerance = device->tolerance * samples_per_us;
+    fprintf(stdout, " - * - DEBUG - * - Asi tady by to mělo být ?");
+    fprintf(stdout,"range_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, pulses->range_db);
+    fprintf(stdout,"rssi_dB",          "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, pulses->rssi_db);
+    fprintf(stdout,"snr_dB",           "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, pulses->snr_db);
+    fprintf(stdout,"noise_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, pulses->noise_db);
 
     // check for rounding to zero
     if ((device->short_width > 0 && s_short <= 0)
@@ -176,7 +186,7 @@ int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
         if (((n == pulses->num_pulses - 1)                            // No more pulses? (FSK)
                     || (pulses->gap[n] > s_reset))      // Long silence (OOK)
                 && (bits.bits_per_row[0] > 0 || bits.num_rows > 1)) { // Only if data has been accumulated
-
+// HONZA ASI TO Co HLEDAM
             events += account_event(device, &bits, __func__);
             bitbuffer_clear(&bits);
         }
@@ -255,7 +265,7 @@ int pulse_demod_ppm(const pulse_data_t *pulses, r_device *device)
         if (((n == pulses->num_pulses - 1)                            // No more pulses? (FSK)
                     || (pulses->gap[n] >= s_reset))     // Long silence (OOK)
                 && (bits.bits_per_row[0] > 0 || bits.num_rows > 1)) { // Only if data has been accumulated
-
+// HONZA 1
             events += account_event(device, &bits, __func__);
             bitbuffer_clear(&bits);
         }

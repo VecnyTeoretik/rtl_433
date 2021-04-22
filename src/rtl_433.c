@@ -418,6 +418,13 @@ static void sdr_callback(unsigned char *iq_buf, uint32_t len, void *ctx)
                 if (demod->analyze_pulses) fprintf(stderr, "Detected OOK package\t%s\n", time_pos_str(cfg, demod->pulse_data.start_ago, time_str));
 
                 p_events += run_ook_demods(&demod->r_devs, &demod->pulse_data);
+
+                fprintf(stderr,"A range_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->range_db);
+                fprintf(stderr,"A rssi_dB",          "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->rssi_db);
+                fprintf(stderr,"A snr_dB",           "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->snr_db);
+                fprintf(stderr,"A noise_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->noise_db);
+
+
                 cfg->frames_count++;
                 cfg->frames_events += p_events > 0;
 
