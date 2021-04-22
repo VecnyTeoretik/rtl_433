@@ -220,7 +220,12 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     if (msg_len <= 0) {
         return msg_len; // pass error code on
     }
-	
+
+	fprintf(stdout, "protocol_num %d \n", decoder->protocol_num);
+	fprintf(stdout, "range_db %.1f dB\n", decoder->range_db);
+	fprintf(stdout, "rssi_db %.1f dB\n", decoder->rssi_db);
+	fprintf(stdout, "snr_db %.1f dB\n", decoder->snr_db);
+	fprintf(stdout, "noise_db %.1f dB\n", decoder->noise_db);
 	fprintf(stdout, "-----------------------\n");
 	fprintf(stdout, "msg_len 0 - %d \n",rh_payload[0]);
 	fprintf(stdout, "header_to 1 - %d \n",rh_payload[1]);
@@ -247,7 +252,11 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     alarms = rh_payload[9];
     sensor_value = rh_payload[10];
     battery_voltage = rh_payload[11];
-  
+    double range_db = decoder->range_db;
+    double rssi_db = decoder->rssi_db;
+    double snr_db = decoder->snr_db;
+    double noise_db = decoder->noise_db;
+
    /*  house_id = rh_payload[1];
     module_id = (rh_payload[2] << 8) | rh_payload[3];
     sensor_type = rh_payload[4];
@@ -267,6 +276,10 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
             "alarms",           "Alarms",           DATA_INT,     alarms,
             "sensor_value",     "Sensor Value",     DATA_INT,     sensor_value,
             _X("battery_mV","battery_voltage"),       "Battery Voltage",  DATA_INT,     _X(battery_voltage * 10, battery_voltage),
+            "range_db",     "range_db",     DATA_DOUBLE,     range_db,
+            "rssi_db",     "rssi_db",     DATA_DOUBLE,     rssi_db,
+            "snr_db",     "snr_db",     DATA_DOUBLE,     snr_db,
+            "noise_db",     "noise_db",     DATA_DOUBLE,     noise_db,
             "mic",              "Integrity",        DATA_STRING,  "CRC",
             NULL);
     /* clang-format on */
@@ -320,3 +333,4 @@ r_device sensible_living = {
     .decode_fn      = &sensible_living_callback,
     .fields         = sensible_living_output_fields,
 };
+  

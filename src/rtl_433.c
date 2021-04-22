@@ -419,13 +419,7 @@ static void sdr_callback(unsigned char *iq_buf, uint32_t len, void *ctx)
 
                 p_events += run_ook_demods(&demod->r_devs, &demod->pulse_data);
 
-                fprintf(stderr,"A range_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->range_db);
-                fprintf(stderr,"A rssi_dB",          "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->rssi_db);
-                fprintf(stderr,"A snr_dB",           "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->snr_db);
-                fprintf(stderr,"A noise_dB",         "", DATA_FORMAT, "%.1f dB", DATA_DOUBLE, (&demod->pulse_data)->noise_db);
-
-
-                cfg->frames_count++;
+                                cfg->frames_count++;
                 cfg->frames_events += p_events > 0;
 
                 for (void **iter = demod->dumper.elems; iter && *iter; ++iter) {

@@ -54,7 +54,12 @@ typedef struct r_device {
     int (*decode_fn)(struct r_device *decoder, struct bitbuffer *bitbuffer);
     struct r_device *(*create_fn)(char *args);
     unsigned disabled;
-    char **fields; ///< List of fields this decoder produces; required for CSV output. NULL-terminated.
+    char **fields;     ///< List of fields this decoder produces; required for CSV output. NULL-terminated.
+    float range_db;
+    float rssi_db;
+    float snr_db;
+    float noise_db;
+
 
     /* public for each decoder */
     int old_model_keys; ///< TODO: temporary allow to change to old style model keys

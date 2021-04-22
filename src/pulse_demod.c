@@ -20,13 +20,18 @@
 #include <math.h>
 #include <limits.h>
 
-static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_name)
+static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_name, pulse_data_t *pulses )
 {
     // run decoder
     int ret = 0;
     if (device->decode_fn) {
+		device->range_db = pulses->range_db;
+		device->rssi_db = pulses->rssi_db;
+		device->snr_db = pulses->snr_db;
+		device->noise_db = pulses->noise_db;
         ret = device->decode_fn(device, bits);
-        //fprintf(stdout, "account_event    %s(): %s\n", demod_name, device->name);
+      // fprintf(stdout,"range_dB %.1f dB\n", pulses->range_db);
+     //   fprintf(stdout,"range_dB %.1f dB\n", device->range_db);
         //bitbuffer_print(bits);
 
     }
@@ -42,7 +47,7 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
         ret = 0;
     }
     else {
-        fprintf(stderr, "Decoder \"%s\" gave invalid return value %d: notify maintainer\n", device->name, ret);
+        fprintf(stdout, "Decoder \"%s\" gave invalid return value %d: notify maintainer\n", device->name, ret);
         exit(1);
     }
 
@@ -55,10 +60,11 @@ static int account_event(r_device *device, bitbuffer_t *bits, char const *demod_
     return ret;
 }
 
+
 int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
 {
 
-    fprintf(stdout, "DEBUG pulse_demod_pcm\n");
+  //  fprintf(stdout, "DEBUG pulse_demod_pcm\n");
     float samples_per_us = pulses->sample_rate / 1.0e6;
     int s_short = device->short_width * samples_per_us;
     int s_long  = device->long_width * samples_per_us;
@@ -67,15 +73,15 @@ int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
     int s_sync  = device->sync_width * samples_per_us;
     int s_tolerance = device->tolerance * samples_per_us;
 
-    fprintf(stdout, " - * - DEBUG - * - Asi tady by to mělo být ?");
+    //fprintf(stdout, " - * - DEBUG - * - Asi tady by to mělo být ?");
 
-    fprintf(stdout, "pulse_demod_pcm  %s\n", device->name);
+    //fprintf(stdout, "pulse_demod_pcm  %s\n", device->name);
     
 
-    fprintf(stdout,"range_dB %.1f dB\n", pulses->range_db);
-    fprintf(stdout,"rssi_dB %.1f dB\n", pulses->rssi_db);
-    fprintf(stdout,"snr_dB %.1f dB\n", pulses->snr_db);
-    fprintf(stdout,"noise_dB %.1f dB\n" , pulses->noise_db);
+    //fprintf(stdout,"range_dB %.1f dB\n", pulses->range_db);
+    //fprintf(stdout,"rssi_dB %.1f dB\n", pulses->rssi_db);
+   // fprintf(stdout,"snr_dB %.1f dB\n", pulses->snr_db);
+   // fprintf(stdout,"noise_dB %.1f dB\n" , pulses->noise_db);
 
     // check for rounding to zero
     if ((device->short_width > 0 && s_short <= 0)
@@ -192,7 +198,7 @@ int pulse_demod_pcm(const pulse_data_t *pulses, r_device *device)
                     || (pulses->gap[n] > s_reset))      // Long silence (OOK)
                 && (bits.bits_per_row[0] > 0 || bits.num_rows > 1)) { // Only if data has been accumulated
 // HONZA ASI TO Co HLEDAM
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
             bitbuffer_clear(&bits);
         }
     } // for
@@ -271,7 +277,7 @@ int pulse_demod_ppm(const pulse_data_t *pulses, r_device *device)
                     || (pulses->gap[n] >= s_reset))     // Long silence (OOK)
                 && (bits.bits_per_row[0] > 0 || bits.num_rows > 1)) { // Only if data has been accumulated
 // HONZA 1
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
             bitbuffer_clear(&bits);
         }
     } // for pulses
@@ -379,7 +385,7 @@ int pulse_demod_pwm(const pulse_data_t *pulses, r_device *device)
         if (((n == pulses->num_pulses - 1)                       // No more pulses? (FSK)
                     || (pulses->gap[n] > s_reset)) // Long silence (OOK)
                 && (bits.num_rows > 0)) {                        // Only if data has been accumulated
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
             bitbuffer_clear(&bits);
         }
         else if (s_gap > 0 && pulses->gap[n] > s_gap
@@ -451,7 +457,7 @@ int pulse_demod_manchester_zerobit(const pulse_data_t *pulses, r_device *device)
         if (((n == pulses->num_pulses - 1)                       // No more pulses? (FSK)
                     || (pulses->gap[n] > s_reset)) // Long silence (OOK)
                 && (bits.num_rows > 0)) {                        // Only if data has been accumulated
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
             bitbuffer_clear(&bits);
             bitbuffer_add_bit(&bits, 0); // Prepare for new message with hardcoded 0
             time_since_last = 0;
@@ -528,7 +534,7 @@ int pulse_demod_dmc(const pulse_data_t *pulses, r_device *device)
         else if (symbol[n] >= s_reset - s_tolerance
                 && bits.num_rows > 0) { // Only if data has been accumulated
             //END message ?
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
         }
     }
 
@@ -597,7 +603,7 @@ int pulse_demod_piwm_raw(const pulse_data_t *pulses, r_device *device)
                     || (symbol[n] > s_reset)) // Long silence (OOK)
                 && (bits.num_rows > 0)) {                   // Only if data has been accumulated
             //END message ?
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
         }
     }
 
@@ -660,7 +666,7 @@ int pulse_demod_piwm_dc(const pulse_data_t *pulses, r_device *device)
                     || (symbol[n] > s_reset)) // Long silence (OOK)
                 && (bits.num_rows > 0)) {                   // Only if data has been accumulated
             //END message ?
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
         }
     }
 
@@ -706,7 +712,7 @@ int pulse_demod_nrzs(const pulse_data_t *pulses, r_device *device)
         if (n == pulses->num_pulses - 1
                     || pulses->gap[n] >= s_reset) {
 
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
         }
     }
 
@@ -803,7 +809,7 @@ int pulse_demod_osv1(const pulse_data_t *pulses, r_device *device)
                     || pulses->gap[n] > s_reset)
                 && (bits.num_rows > 0)) { // Only if data has been accumulated
             //END message ?
-            events += account_event(device, &bits, __func__);
+            events += account_event(device, &bits, __func__, &pulses);
             return events;
         }
         manbit ^= 1;
@@ -825,7 +831,7 @@ int pulse_demod_string(const char *code, r_device *device)
 
     bitbuffer_parse(&bits, code);
 
-    events += account_event(device, &bits, __func__);
+    events += account_event(device, &bits, __func__, "");
 
     return events;
 }
