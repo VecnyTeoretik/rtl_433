@@ -82,6 +82,10 @@ static int nexus_callback(r_device *decoder, bitbuffer_t *bitbuffer)
                 "channel",       "Channel",     DATA_INT, channel,
                 "battery",       "Battery",     DATA_STRING, battery ? "OK" : "LOW",
                 "temperature_C", "Temperature", DATA_FORMAT, "%.02f C", DATA_DOUBLE, temp_c,
+				"range_db",     "range_db",     DATA_DOUBLE,     (double)decoder->range_db,
+				"rssi_db",     	"rssi_db",     	DATA_DOUBLE,     (double)decoder->rssi_db,
+				"snr_db",     	"snr_db",     	DATA_DOUBLE,     (double)decoder->snr_db,
+				"noise_db",     "noise_db",     DATA_DOUBLE,     (double)decoder->noise_db,
                 NULL);
         /* clang-format on */
     }
@@ -94,6 +98,10 @@ static int nexus_callback(r_device *decoder, bitbuffer_t *bitbuffer)
                 "battery",       "Battery",     DATA_STRING, battery ? "OK" : "LOW",
                 "temperature_C", "Temperature", DATA_FORMAT, "%.02f C", DATA_DOUBLE, temp_c,
                 "humidity",      "Humidity",    DATA_FORMAT, "%u %%", DATA_INT, humidity,
+				"range_db",     "range_db",     DATA_DOUBLE,     (double)decoder->range_db,
+				"rssi_db",     	"rssi_db",     	DATA_DOUBLE,     (double)decoder->rssi_db,
+				"snr_db",     	"snr_db",     	DATA_DOUBLE,     (double)decoder->snr_db,
+				"noise_db",     "noise_db",     DATA_DOUBLE,     (double)decoder->noise_db,
                 NULL);
         /* clang-format on */
     }

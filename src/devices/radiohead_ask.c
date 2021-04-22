@@ -259,10 +259,6 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
     alarms = rh_payload[9];
     sensor_value = rh_payload[10];
     battery_voltage = rh_payload[11];
-    double range_db = decoder->range_db;
-    double rssi_db = decoder->rssi_db;
-    double snr_db = decoder->snr_db;
-    double noise_db = decoder->noise_db;
 
    /*  house_id = rh_payload[1];
     module_id = (rh_payload[2] << 8) | rh_payload[3];
@@ -282,12 +278,12 @@ static int sensible_living_callback(r_device *decoder, bitbuffer_t *bitbuffer)
             "sensor_count",     "Sensor Count",     DATA_INT,     sensor_count,
             "alarms",           "Alarms",           DATA_INT,     alarms,
             "sensor_value",     "Sensor Value",     DATA_INT,     sensor_value,
-            _X("battery_mV","battery_voltage"),       "Battery Voltage",  DATA_INT,     _X(battery_voltage * 10, battery_voltage),
-            "range_db",     "range_db",     DATA_DOUBLE,     range_db,
-            "rssi_db",     "rssi_db",     DATA_DOUBLE,     rssi_db,
-            "snr_db",     "snr_db",     DATA_DOUBLE,     snr_db,
-            "noise_db",     "noise_db",     DATA_DOUBLE,     noise_db,
-            "mic",              "Integrity",        DATA_STRING,  "CRC",
+            _X("battery_mV",	"battery_voltage"),       "Battery Voltage",  DATA_INT,     _X(battery_voltage * 10, battery_voltage),
+				"range_db",     "range_db",     DATA_DOUBLE,     (double)decoder->range_db,
+				"rssi_db",     	"rssi_db",     	DATA_DOUBLE,     (double)decoder->rssi_db,
+				"snr_db",     	"snr_db",     	DATA_DOUBLE,     (double)decoder->snr_db,
+				"noise_db",     "noise_db",     DATA_DOUBLE,     (double)decoder->noise_db,
+            "mic",           	"Integrity",        DATA_STRING,  "CRC",
 			 "fields", "", DATA_ARRAY, data_array(fields_len, DATA_STRING, decoder->fields),
             NULL);
     /* clang-format on */

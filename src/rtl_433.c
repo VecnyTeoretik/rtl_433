@@ -419,7 +419,7 @@ static void sdr_callback(unsigned char *iq_buf, uint32_t len, void *ctx)
 
                 p_events += run_ook_demods(&demod->r_devs, &demod->pulse_data);
 
-                                cfg->frames_count++;
+                cfg->frames_count++;
                 cfg->frames_events += p_events > 0;
 
                 for (void **iter = demod->dumper.elems; iter && *iter; ++iter) {

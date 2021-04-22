@@ -97,6 +97,11 @@ static int infactory_callback(r_device *decoder, bitbuffer_t *bitbuffer)
             "temperature_F",    "Temperature",  DATA_FORMAT, "%.02f F", DATA_DOUBLE, temp_f,
             "humidity",         "Humidity",     DATA_FORMAT, "%u %%", DATA_INT, humidity,
             "mic",              "Integrity",    DATA_STRING, "CRC",
+				"range_db",     "range_db",     DATA_DOUBLE,     (double)decoder->range_db,
+				"rssi_db",     	"rssi_db",     	DATA_DOUBLE,     (double)decoder->rssi_db,
+				"snr_db",     	"snr_db",     	DATA_DOUBLE,     (double)decoder->snr_db,
+				"noise_db",     "noise_db",     DATA_DOUBLE,     (double)decoder->noise_db,
+
             NULL);
     /* clang-format on */
 
