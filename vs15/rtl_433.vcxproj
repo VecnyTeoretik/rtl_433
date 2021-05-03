@@ -229,8 +229,8 @@ COPY ..\..\libusb\MS64\dll\libusb*.dll $(TargetDir)</Command>
     <ClCompile Include="..\src\devices\holman_ws5029.c" />
     <ClCompile Include="..\src\devices\hondaremote.c" />
     <ClCompile Include="..\src\devices\honeywell.c" />
-    <ClCompile Include="..\src\devices\honeywell_wdb.c" />
     <ClCompile Include="..\src\devices\honeywell_cm921.c" />
+    <ClCompile Include="..\src\devices\honeywell_wdb.c" />
     <ClCompile Include="..\src\devices\ht680.c" />
     <ClCompile Include="..\src\devices\ibis_beacon.c" />
     <ClCompile Include="..\src\devices\ikea_sparsnas.c" />
@@ -304,6 +304,7 @@ COPY ..\..\libusb\MS64\dll\libusb*.dll $(TargetDir)</Command>
     <ClCompile Include="..\src\devices\tpms_citroen.c" />
     <ClCompile Include="..\src\devices\tpms_elantra2012.c" />
     <ClCompile Include="..\src\devices\tpms_ford.c" />
+    <ClCompile Include="..\src\devices\tpms_hyundai_vdo.c" />
     <ClCompile Include="..\src\devices\tpms_jansite.c" />
     <ClCompile Include="..\src\devices\tpms_jansite_solar.c" />
     <ClCompile Include="..\src\devices\tpms_pmv107j.c" />
